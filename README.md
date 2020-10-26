@@ -1,6 +1,6 @@
 # Custom Command Minifier
 
-> Never worry about the character limit again | http://jo3-l.github.io/cc-minifier</p>
+> Never worry about the character limit again | https://jo3-l.github.io/cc-minifier</p>
 
 # How it works
 * Remove all comments
