@@ -18,7 +18,6 @@ const output = CodeMirror.fromTextArea(
 	},
 );
 
-const MARKDOWN_SECTION = /##.+\s+```.*\s+([\S\s]+)\s*```\s*$/;
 const COMMENTS = /{{(-\s+)?\/\*[\S\s]+?\*\/(\s+-)?}}/g;
 const RIGHT_BRACKETS = /{{-?\s+/g;
 const LEFT_BRACKETS = /\s+-?}}/g;
@@ -26,10 +25,11 @@ const INDENTS = /\t+/g;
 const BLANK_LINES = /}}\s+{{/g;
 const ASSIGNMENT = /\$(\w+)(?:\s+:=\s*|\s*:=\s+)/g;
 const REASSIGNMENT = /\$(\w+)\s+=\s*/g;
-const VARIABLES = /(\w+)\s*:=/g;
+const VARIABLES = /\$(\w+)(?:\s*,\s*\$(\w+))?\s*:=/g;
 const KEEP_VARIABLE_NAMES = /{{(?:-\s+)?\/\*\s*@ym-keep\s+([\w,\s]+?)\s*\*\/(\s+-)?}}/
 
-function* createIdentifierGenerator(existing) {
+function* generateIdentifiers(existing) {
+	// Lazy impl, but works fine for basically all cases
 	const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_';
 	for (let x = 0; x < chars.length; x++) {
 		const gen = chars[x];
@@ -82,13 +82,16 @@ function minify() {
 		.trim();
 
 	const variables = new Set();
-	for (const match of code.matchAll(VARIABLES)) if (!ignoredVars.has(match[1])) variables.add(match[1]);
+	for (const [, first, second] of code.matchAll(VARIABLES)) {
+		variables.add(first);
+		variables.add(second);
+	}
 
-	const nameGenerator = createIdentifierGenerator(variables);
+	const iter = generateIdentifiers(variables);
 	for (const variable of [...variables].sort((a, b) => b.length - a.length)) {
 		code = code.replace(
 			new RegExp(`\\$${variable}`, 'g'),
-			`$$${nameGenerator.next().value}`,
+			`$$${iter.next().value}`,
 		);
 	}
 
