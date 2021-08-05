@@ -1,36 +1,74 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<title></title>
+		<meta charset="UTF-8" />
+		<meta name="author" content="Joe L." />
+		<meta property="og:url" content="https://jo3-L.github.io/cc-minifier" />
+		<meta property="og:title" content="YAGPDB CC Minifier" />
+		<meta property="og:description" content="Minifier for YAGPDB CCs." />
+		<meta property="og:type" content="website" />
+		<meta name="theme-color" content="#DE0D1F" />
+		<meta name="description" content="YAGPDB CC Minifier." />
+		<link href="./style.css" rel="stylesheet" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/mode/go/go.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" />
+		<link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet" />
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+		<link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
+	</head>
 
-<head>
-	<title></title>
-	<meta charset="UTF-8">
-	<meta name="author" content="Joe L.">
-	<meta property="og:url" content="https://jo3-L.github.io/cc-minifier">
-	<meta property="og:title" content="YAGPDB CC Minifier">
-	<meta property="og:description" content="Minifier for YAGPDB CCs.">
-	<meta property="og:type" content="website">
-	<meta name="theme-color" content="#DE0D1F">
-	<meta name="description" content="YAGPDB CC Minifier.">
-	<link href="./style.css" rel="stylesheet">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/mode/go/go.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" />
-	<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-</head>
+	<body>
+		<h1>YAGPDB CC Minifier</h1>
+		<h2>Input</h2>
+		<textarea id="input"></textarea>
+		<button id="minify-btn">Minify!</button>
+		<h2>Output</h2>
+		<textarea id="output" readonly></textarea>
+		<script type="module">
+			import { minify } from './js/minifier.js';
 
-<body>
-	<h1>YAGPDB CC Minifier</h1>
-	<h2>Input</h2>
-	<textarea id="input"></textarea>
-	<button onclick="minify()">Minify!</button>
-	<h2>Output</h2>
-	<textarea id="output" readonly></textarea>
-	<script src="./script.js"></script>
+			const editor = CodeMirror.fromTextArea(document.getElementById('input'), {
+				lineNumbers: true,
+				theme: 'ayu-dark',
+				mode: 'text/x-go',
+				autofocus: true,
+				smartIndent: false,
+			});
+			const output = CodeMirror.fromTextArea(document.getElementById('output'), {
+				lineNumbers: true,
+				readOnly: true,
+				theme: 'ayu-dark',
+				mode: 'text/x-go',
+			});
 
-	<footer>
-		Made by Joe L (<strong>Joe_#6041</strong> on Discord). MIT License | <a
-			href="https://github.com/jo3-l/cc-minifier">Source</a>
-	</footer>
-</body>
+			document.getElementById('minify-btn').addEventListener('click', () => {
+				const code = editor.getValue();
+				if (code.length > 0) {
+					try {
+						const minified = minify(code);
+						output.setValue(minified);
 
+						const reducedBy = ((1 - minified.length / code.length) * 100).toFixed(2);
+						Swal.fire({
+							icon: 'success',
+							title: 'Successfully minified code!',
+							html: `<strong>Before / After:</strong> ${code.length} => ${minified.length} characters<br><strong>Size reduction:</strong> ${reducedBy}&#37;`,
+						});
+					} catch (error) {
+						if (error instanceof SyntaxError) Swal.fire({ icon: 'error', title: 'Syntax Error', text: error.message });
+						else Swal.fire({ icon: 'error', title: 'Error', text: error.message });
+					}
+				} else {
+					Swal.fire({ icon: 'warning', title: 'No code provided', text: 'Please input some code to minify.' });
+				}
+			});
+		</script>
+
+		<footer>
+			Made by Joe L (<strong>jo3-l#2997</strong> on Discord). MIT License |
+			<a href="https://github.com/jo3-l/cc-minifier">Source</a>
+		</footer>
+	</body>
 </html>
