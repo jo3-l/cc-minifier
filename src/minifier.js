@@ -91,7 +91,7 @@ function applyTransformerToToken(transformer, token) {
 }
 
 function isInIgnoredSpan(ignoredSpans, index) {
-	return ignoredSpans.some(([start, end]) => index >= start && index <= end);
+	return ignoredSpans.some(([start, end]) => index > start && index < end);
 }
 
 function getIgnoredSpans(tokens) {
