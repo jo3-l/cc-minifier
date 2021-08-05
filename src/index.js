@@ -7,15 +7,12 @@ const editor = CodeMirror.fromTextArea(document.getElementById('input'), {
 	autofocus: true,
 	smartIndent: false,
 });
-
 const output = CodeMirror.fromTextArea(document.getElementById('output'), {
 	lineNumbers: true,
 	readOnly: true,
 	theme: 'ayu-dark',
 	mode: 'text/x-go',
 });
-
-document.getElementById('wrapper').removeAttribute('hidden');
 
 document.getElementById('minify-btn').addEventListener('click', () => {
 	const code = editor.getValue();
