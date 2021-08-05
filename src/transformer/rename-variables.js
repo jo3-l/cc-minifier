@@ -33,7 +33,7 @@ function* createVariableGenerator() {
 		chars[0] = charset.indexOf('9') + 1;
 		while (curIdx !== len) {
 			yield chars.map((i) => charset[i]).join('');
-			if (chars[curIdx]++ === charset.length) curIdx++;
+			if (++chars[curIdx] === charset.length) curIdx++;
 		}
 
 		len++;
