@@ -12,14 +12,14 @@ Finally, the tokens are reconstructed into code.
 
 # Transformations available
 
-- `removeIndents` - Removes indentation.
-- `renameVariables` - Uses generated variable names, e.g., `a`, `b`, `c`, `d`, and so on.
-- `shortenDeclarations` - Transforms `$a := b` to `$a:=b`, `$a = b` to `$a =b`, and`$a, $b := c` to `$a,$b:=c`.
-- `stripComments` - Removes all comments from the code.
-- `stripTrimMarkers` - Transforms `{{- ... -}}` to just `{{...}}`.
-- `trimInActions` - Removes superfluous spaces in actions, e.g. `{{ a ( b ) }}` becomes `{{a (b)}}`.
-- `trimStartAndEnd` - Trims spaces from the start and end of the code.
-- `trimText` - Trims spaces from the start and end of all text. `{{hello}}\n{{world}}` becomes simply `{{hello}}{{world}}`, `{{hello}} foo {{bar}}` becomes `{{hello}}foo{{bar}}`, and so on.
+- **removeIndents** - Removes indentation.
+- **renameVariables** - Uses generated variable names, e.g., `a`, `b`, `c`, `d`, and so on.
+- **shortenDeclarations** - Transforms `$a := b` to `$a:=b`, `$a = b` to `$a =b`, and`$a, $b := c` to `$a,$b:=c`.
+- **stripComments** - Removes all comments from the code.
+- **stripTrimMarkers** - Transforms `{{- ... -}}` to just `{{...}}`.
+- **trimInActions** - Removes superfluous spaces in actions, e.g. `{{ a ( b ) }}` becomes `{{a (b)}}`.
+- **trimStartAndEnd** - Trims spaces from the start and end of the code.
+- **trimText** - Trims spaces from the start and end of all text. `{{hello}}\n{{world}}` becomes simply `{{hello}}{{world}}`, `{{hello}} foo {{bar}}` becomes `{{hello}}foo{{bar}}`, and so on.
 
 Some transformations may alter the output of the code and are disabled by default. In particular, `stripTrimMarkers` and `trimText` may change the meaning of your code; use them with caution. **All other transformations should not change the meaning or output of the code at all and are enabled by default.**
 
