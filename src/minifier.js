@@ -25,7 +25,10 @@ export function minify(code) {
 		if (isInIgnoredSpan(ignoredSpans, i) && token.type === TokenType.Action && !isComment(token)) {
 			for (const innerToken of token.innerTokens) {
 				if (innerToken.type === TokenType.ActionComponent) {
-					for (const varName of innerToken.value.match(variableRegexp)) ignoredVars.add(varName);
+					const varNames = innerToken.value.match(variableRegexp);
+					if (varNames) {
+						for (const varName of varNames) ignoredVars.add(varName);
+					}
 				}
 			}
 		}
