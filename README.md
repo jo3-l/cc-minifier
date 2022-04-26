@@ -2,7 +2,7 @@
 
 > Drastically shortens YAGPDB custom command code: never worry about the character limit again.
 
-See it in action [here](https://jo3-l.github.io/cc-minifier).
+See it in action [here](https://yag-cc-minifier.netlify.app/).
 
 # How it works
 
